@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native">
+ 
+    <style>
+        .body{
+        background-image:url('arena.jpg') ;
+        no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: center;
+        }
+    </style>
+
+    <style>
+        .text{
+        font-weight: bold;
+        font-family: 'Trebuchet MS';
+        color: green;
+        font-size:2.0em;
+        background-color: #F5DA81;
+     
+        }
+    </style>
+     
+    <style>
+        .warning {
+
+        background-color: #D0F5A9;
+       
+        }
+    </style>
+
+    <window id="test"  border="none" position="parent"  mode="embedded" width="100%" height="100%" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('M_T.ClassMain')">
+        <borderlayout>
+            <north size="6%" style="background:#F5DA81" >
+                <vbox style="text-align: center">
+                    <label  value="APdisc Program" sclass="text"  style="text-align: center"/>
+                </vbox>
+            </north>
+            <south size="94%">
+                <borderlayout>
+            
+            
+            
+            
+                    <west  title="Menu Options" size="10%" flex="false" maxsize="250" splittable="false" collapsible="true" style="background:#E3F6CE"  >
+                            
+                        <menubar id="menubar" orient="vertical" width="100%" autodrop="true" style="background:#E3F6CE">
+            
+                            <menu label="File" >
+                                <menupopup>
+                                         
+                                    <menuitem label="Open file"  disabled="@load(vm.fileopen)" upload="true" onUpload="@command('open',upEvent=event)"/>
+                                        
+                                    <menuseparator/>
+                                    <menuitem label="Close" onClick="alert(self.label)"/>
+                                </menupopup>
+                            </menu>
+
+                                                                                                                                                                                                                                                                                                                                                                                              
+                                                                                                                                                
+                            <menu label="Pocess File">
+                                <menupopup>
+                                           
+                                          
+                                  <!--  <menuitem label="Only (Major)"  disabled = "@load(vm.fileuploaded)" onClick="@command('procesa_Archivo_Major')"/>
+                                    <menuitem label="Only (Major and Trace)"  disabled = "@load(vm.fileuploaded)" onCli <menuitem label="APMdisc"  disabled = "@load(vm.fileuploaded)" onClick="@command('procesa_Archivo_Both')"/>   ck="@command('procesa_Archivo_MT')"/> -->
+                                    <menuitem label="APMdisc"  disabled = "@load(vm.fileuploaded)" onClick="@command('procesa_Archivo_Both')"/>     
+                                    
+	    				
+                                </menupopup>
+                            </menu>
+                        
+                         
+                        
+                            <menuitem label="Figures"  disabled="@load(vm.fileprocess)" onClick="@command('graficas_major')" />
+                       
+	    			
+	    		
+                        </menubar>
+              
+                    </west>
+                    <center  border="none" flex="false" sclass="body">
+                
+                
+                
+                        <window visible="@load(vm.fileopen)" title="FILE OPEN" border="normal"  sclass="warning"  sizable="false"  onClose="" closable="true"  maximizable="false" width="100%"  height="100%">
+	     
+                            <grid  model="@bind(vm.tabla)"   autopaging="true" mold="paging" vflex="1" sizedByContent="true" width="100%"  height="50%">
+           
+
+                                <auxhead>
+                                    <auxheader label="GENERAL DATA" colspan="5"  align="center"  />
+                                    <auxheader label="MAJOR ELEMENTS" colspan="11"  align="center"/>
+                
+                                    <auxheader label="ADJUSTEDM" colspan="10"  align="center"/>
+                                    <auxheader label="TRANSFORM ILR_Major" colspan="9"  align="center"/>
+                            
+                                    <auxheader label="ADJUSTEDMT" colspan="16"  align="center"/>
+                                    <auxheader label="TRANSFORM ILR_MT" colspan="15"  align="center"/>
+                      
+                 
+
+                
+                                </auxhead>
+    
+                                <auxhead>
+                                    <auxheader label="" colspan="5"/>
+                                    <auxheader label="" colspan="11"/>
+               
+                                    <auxheader label="" colspan="10"/>
+                                    <auxheader label="" colspan="9"/>
+                            
+                                    <auxheader label="" colspan="16"/>
+                                    <auxheader label="" colspan="15"/>
+               
+                                </auxhead>
+                                <columns  >
+                                    <column label="CONST" width="100px"/>
+                                    <column label="LOCALITY"  width="100px"/>
+                                    <column label="SAMPID" width="100px"/>
+                                    <column label="RESULT_M" width="150px"/>
+                                    <column label="RESULT_MT" width="100px"/>
+                 
+                                    <column label="SIO2"/>
+                                    <column label="TIO2"/>
+                                    <column label="AL2O3"/>
+                                    <column label="FE2O3"/>
+                                    
+                                    <column label="MNO"/>
+                                    <column label="MGO"/>
+                                    <column label="CAO"/>
+                                    <column label="NA2O"/>
+                                    <column label="K2O"/>
+                                    <column label="P2O5"/>
+                
+                
+
+                                    <column label="SIO2adj1" width="100px"/>
+                                    <column label="TIO2adj1" width="100px" />
+                                    <column label="AL2O3adj1" width="100px" />
+                                    <column label="FE2O3Tadj1" width="100px" />
+                                    <column label="MNOadj1" width="100px" />
+                                    <column label="MGOadj1" width="100px" />
+                                    <column label="CAOadj1" width="100px"/>
+                                    <column label="NA2Oadj1" width="100px" />
+                                    <column label="K2Oadj1" width="100px"/>
+                                    <column label="P2O5adj1" width="100px" />
+                
+                                    <column label="IlrTIO2m" width="100px" />
+                                    <column label="IlrAL2O3m" width="100px" />
+                                    <column label="IlrFE2O3Tm" width="100px" />
+                                    <column label="IlrMNOm" width="100px" />
+                                    <column label="IlrMGOm" width="100px" />
+                                    <column label="IlrCAOm" width="100px"/>
+                                    <column label="IlrNA2Om" width="100px" />
+                                    <column label="IlrK2Om" width="100px"/>
+                                    <column label="IlrP2O5m" width="100px" />
+                            
+                                    <column label="SIO2adjmt" width="100px"/>
+                                    <column label="TIO2adjmt" width="100px" />
+                                    <column label="AL2O3adjmt" width="100px" />
+                                    <column label="FE2O3Tadjmt" width="100px" />
+                                    <column label="MNOadjmt" width="100px" />
+                                    <column label="MGOadjmt" width="100px" />
+                                    <column label="CAOadjmt" width="100px"/>
+                                    <column label="NA2Oadjmt" width="100px" />
+                                    <column label="K2Oadjmt" width="100px"/>
+                                    <column label="P2O5adjmt" width="100px" />
+                                    <column label="Cradjmt" width="100px" />
+                                    <column label="Nbadjmt" width="100px" />
+                                    <column label="NiOadjmt" width="100px"/>
+                                    <column label="V2adjmt" width="100px" />
+                                    <column label="Yadjmt" width="100px"/>
+                                    <column label="Zradjmt" width="100px" />
+                
+                                    <column label="IlrTIO2mt" width="100px" />
+                                    <column label="IlrAL2O3mt" width="100px" />
+                                    <column label="IlrFE2O3Tmt" width="100px" />
+                                    <column label="IlrMNOmt" width="100px" />
+                                    <column label="IlrMGOmt" width="100px" />
+                                    <column label="IlrCAOmt" width="100px"/>
+                                    <column label="IlrNA2Omt" width="100px" />
+                                    <column label="IlrK2Omt" width="100px"/>
+                                    <column label="IlrP2O5mt" width="100px" />
+                                    <column label="IlrCrmt" width="100px" />
+                                    <column label="IlrNbmt" width="100px" />
+                                    <column label="IlrNimt" width="100px"/>
+                                    <column label="IlrVmt" width="100px" />
+                                    <column label="IlrYmt" width="100px"/>
+                                    <column label="IlrZrmt" width="100px" />
+                
+               
+           
+                                </columns>
+           
+                                <template name="model">
+                                    <row>
+                                        <label value="@bind(each.consecut)"/>
+                                        <label value="@bind(each.locality)"/>
+                                        <label value="@bind(each.sampID)"/>
+                     
+                                        <label value="@bind(each.pasive_Active)"/>
+                                        <label value="@bind(each.pasive_Active_mt)"/>
+                     
+                                        <label value="@bind(each.sio2)"/>
+                                        <label value="@bind(each.tio2)"/>
+                                        <label value="@bind(each.al2o3)"/>
+                                        <label value="@bind(each.fe2o3)"/>
+                                       
+                                        <label value="@bind(each.mno)"/>
+                                        <label value="@bind(each.mgo)"/>
+                                        <label value="@bind(each.cao)"/>
+                                        <label value="@bind(each.na2o)"/>
+                                        <label value="@bind(each.kk2o)"/>
+                                        <label value="@bind(each.pp2o5)"/>
+                    
+                     
+                     
+                                        <textbox value="@bind(each.sio2A)" inplace="true"/>
+                                        <textbox value="@bind(each.tio2A)" inplace="true"/>
+                                        <textbox value="@bind(each.al2o3A)" inplace="true"/>
+                                        <textbox value="@bind(each.fe2o3tA)" inplace="true"/>
+                                        <textbox value="@bind(each.mnoA)" inplace="true"/>
+                                        <textbox value="@bind(each.mgoA)" inplace="true"/>
+                                        <textbox value="@bind(each.caoA)" inplace="true"/>
+                                        <textbox value="@bind(each.na2oA)" inplace="true"/>
+                                        <textbox value="@bind(each.kk2oA)" inplace="true"/>
+                                        <textbox value="@bind(each.pp2o5A)" inplace="true"/>
+                    
+                                    
+                    
+                    
+                                        <textbox value="@bind(each.ilrTiM)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrAlM)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrFeTM)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrMnM)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrMgM)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrCaM)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrNaM)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrKM)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrPM)" inplace="true"/>
+                   
+                     
+                                        <textbox value="@bind(each.sio2mtA)" inplace="true"/>
+                                        <textbox value="@bind(each.tio2mtA)" inplace="true"/>
+                                        <textbox value="@bind(each.al2o3mtA)" inplace="true"/>
+                                        <textbox value="@bind(each.fe2o3tmtA)" inplace="true"/>
+                                        <textbox value="@bind(each.mnomtA)" inplace="true"/>
+                                        <textbox value="@bind(each.mgomtA)" inplace="true"/>
+                                        <textbox value="@bind(each.caomtA)" inplace="true"/>
+                                        <textbox value="@bind(each.na2omtA)" inplace="true"/>
+                                        <textbox value="@bind(each.kk2omtA)" inplace="true"/>
+                                        <textbox value="@bind(each.pp2o5mtA)" inplace="true"/>
+                                
+                                        <textbox value="@bind(each.crmtA)" inplace="true"/>
+                                        <textbox value="@bind(each.nbmtA)" inplace="true"/>
+                                        <textbox value="@bind(each.nimtA)" inplace="true"/>
+                                        <textbox value="@bind(each.vmtA)" inplace="true"/>
+                                        <textbox value="@bind(each.ymtA)" inplace="true"/>
+                                        <textbox value="@bind(each.zrmtA)" inplace="true"/>
+                    
+                                    
+                    
+                    
+                                        <textbox value="@bind(each.ilrTiMT)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrAlMT)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrFeTMT)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrMnMT)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrMgMT)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrCaMT)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrNaMT)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrKMT)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrPMT)" inplace="true"/>
+                                
+                                        <textbox value="@bind(each.ilrCrMT)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrNbMT)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrNiMT)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrVMT)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrYMT)" inplace="true"/>
+                                        <textbox value="@bind(each.ilrZrMT)" inplace="true"/>
+                     
+                     
+                     
+                                    </row>
+                                </template>
+           
+                            </grid>
+                            <separator></separator>
+   
+    
+                            <progressmeter id="" value="@bind(vm.progreso)" width="100%"  visible="@load(vm.fileprocess)"/>
+
+         
+                        </window>
+                    </center>
+                    <east size="40%" border="none" flex="true"  sclass="body" autoscroll="true">
+                        <borderlayout visible="@load(vm.graficas)">               
+                            <north size="50%" >
+                
+                                <window id="imag" title="MOR/OP SETTING MAJOR"  sclass="warning" visible="@load(vm.graficas)" width="100%"  height="100%" border="normal"  sizable="true"  closable="true"  maximizable="true" contentStyle="overflow:auto;">
+           
+                                    <hbox>
+           <image id="myImage"  content="@load(vm.imagen)" visible="@load(not empty vm.imagen)" />
+            
+                                    </hbox>
+    
+       
+                                </window>
+                            </north>
+                            <south size="50%">
+                                <window id="imag2" title="MOR/OP SETTING MAJOR AND TRACE"  sclass="warning" visible="@load(vm.graficasmt)" width="100%"  height="100%" border="normal"  sizable="true"  closable="true"  maximizable="true" contentStyle="overflow:auto;">
+           
+                                    <hbox>
+       
+        
+                                        <image id="myImage2"  content="@load(vm.imagen2)" visible="@load(not empty vm.imagen2)" />
+            
+                                       
+       
+                                    </hbox>
+    
+       
+                                </window>
+                            </south>
+       
+                        </borderlayout>
+       
+                    </east>
+            
+                </borderlayout>
+       
+            </south>
+       
+        </borderlayout>
+          
+        
+        <vbox>
+            
+            
+            <iframe height="10%" width="10%" id="reportframe2" content="@bind(vm.fileContent2)"/> 
+            <iframe height="10%" width="10%" id="reportframe3" content="@bind(vm.fileContent3)"/>        
+             <iframe height="10%" width="10%" id="reportframe6" content="@bind(vm.fileContentimg1)"/>   
+            <iframe height="10%" width="10%" id="reportframe7" content="@bind(vm.fileContentimg2)"/> 
+        </vbox> 
+       
+ 
+            
+    </window>
+
+   
+</zk>
+

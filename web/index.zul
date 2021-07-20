@@ -1,0 +1,853 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native">
+    <style>
+        .text{
+        font-weight: bold;
+        font-family: 'Trebuchet MS';
+        color: blue;
+        font-size:20px;
+        background-color: #CCE5FF;
+     
+        }
+    </style>
+    <style>
+        .text2{
+       
+        font-family: 'Arial';
+        color: black;
+        font-size:10px;
+        background-color: #CCE5FF;
+        font-style: italic;
+     
+        }
+    </style>
+   
+    
+    
+    <window id="test"  border="none" position="parent" mode="embedded" width="100%"  
+            contentStyle="background:#66B2FF,overflow:auto" height="100%"   
+            apply="org.zkoss.bind.BindComposer, M_T.LongOperationComposer" 
+            viewModel="@id('vm') @init('M_T.ClassMain')">
+        <borderlayout>
+            <north size="10%" style="background:#CCE5FF">
+                <vbox vflex="1" hflex="1" pack="center" align="center">
+                    <!-- <image id="ico" src="/img/title.png"  width="500px"  height="50px"/>-->
+                    <hbox style="text-align: center">
+                        <label id="text" value="TecMagDiSys: A new computer program for multidimensional tectonomagmatic discrimination" sclass="text" />
+                    </hbox>
+                    <separator bar="true"/>
+                    <label id="text2" value="---" sclass="text2" />
+                </vbox>
+            </north >
+            
+            <south size="90%">
+                <borderlayout>
+                    <west title="Menu Options" size="200px" collapsible="false" style="background:#F2F2F2" >
+                        <vbox height="100%" width="100%">
+                            <menubar id="menubar" autodrop="true" orient="vertical" width="100%" > 
+                                <menu label="Open File" width="200px"  >                                                                   
+                                    <menupopup>  
+                                        <menu label="Discriminate Tectonic Setting">                                                                           
+                                            <menupopup>  
+                                                <menuitem label="Only Major Elements"  upload="true" onUpload="@command('openM',upEvent=event)" disabled="@load(vm.fileopen)"/>                                                  
+                                                <menuitem label="Major and Trace Elements"  upload="true" onUpload="@command('openMT',upEvent=event)" disabled="@load(vm.fileopen)"/>                                        
+                                            </menupopup> 
+                                        </menu> 
+                                        
+                                        <menu label="Robustness">                                                                           
+                                            <menupopup>  
+                                                <menu label="Uncertainty Propagation">                                                                           
+                                                    <menupopup>  
+                                                        <menuitem label="Only Major Elements"  upload="true" onUpload="@command('openPropagationM',upEvent=event)" disabled="@load(vm.fileopen)"/>                                                
+                                                        <menuitem label="Major and Trace Elements"  upload="true" onUpload="@command('openPropagationMT',upEvent=event)" disabled="@load(vm.fileopen)"/>
+                                                    </menupopup> 
+                                                </menu>    
+                                                <menu label="Post-emplacement Changes">                                                                           
+                                                    <menupopup>  
+                                                        <menuitem label="Only Major Elements"  upload="true" onUpload="@command('openPostemplaM',upEvent=event)" disabled="@load(vm.fileopen)"/>                                                
+                                                        <menuitem label="Major and Trace Elements"  upload="true" onUpload="@command('openPostemplaMT',upEvent=event)" disabled="@load(vm.fileopen)"/>
+                                                    </menupopup> 
+                                                </menu> 
+                                                 
+                                            </menupopup> 
+                                        </menu> 
+                                    </menupopup> 
+                                </menu>
+                                
+                                
+                                <menu label="Process File" width="200px" visible="@load(vm.fileopen)" >                                                                   
+                                    <menupopup>  
+                                        <menu label="Discriminate Tectonic Setting">                                                                           
+                                            <menupopup>  
+                                                <menuitem id="procButton" label="Only Major Elements"  onLongOp="@command('processM')" disabled = "@load(vm.fileuploadedM)"/> 
+                                                <menuitem id="procButton2" label="Major and Trace Elements"  onLongOp="@command('processMT')" disabled = "@load(vm.fileuploadedMT)"/>                                        
+                                            </menupopup> 
+                                        </menu> 
+                                        <menu label="Robustness">                                                                           
+                                            <menupopup>
+                                                <menu label="Uncertainty Propagation">                                                                           
+                                                    <menupopup>  
+                                                        <menuitem  label="Only Major Elements" onClick="@command('processPropagationM')" disabled="@load(vm.filePropM)"/>
+                                                        <menuitem  label="Major and Trace Elements" onClick="@command('processPropagationMT')" disabled="@load(vm.filePropMT)"/>
+                                                    </menupopup> 
+                                                </menu> 
+                                                <menu label="Post-emplacement Changes">                                                                           
+                                                    <menupopup>  
+                                                        <menuitem label="Only Major Elements" onClick="@command('processPostemplaM')" disabled="@load(vm.filePostemplaM)"/>
+                                                        <menuitem label="Major and Trace Elements" onClick="@command('processPostemplaMT')" disabled="@load(vm.filePostemplaMT)"/>
+                                                    </menupopup> 
+                                                </menu> 
+                                            </menupopup> 
+                                        </menu> 
+                                    
+                   
+                                    </menupopup>       
+                                </menu>
+                                
+                                <menuitem label="Figures" visible="@load(vm.fileprocess)" onClick="@command('graficasM')"/>
+                            </menubar>
+                        </vbox>
+                    </west>
+                    
+                    <center border="none" style="background:#E7FCF4">
+                        <tabbox width="100%" height="100%">
+                            <tabs>
+                                <tab label="File Open" visible="@load(vm.fileopen)" />
+                                <tab label="Figure 1 (M)" visible="@load(vm.graficas)"/>
+                                <tab label="Figure 2 (MT)" visible="@load(vm.graficas)"/>
+                            </tabs>
+                            <tabpanels>
+                                <tabpanel>
+                                    <vbox   visible="@load(not vm.fileopen)" pack="center" align="center">
+                                        <html>
+<![CDATA[
+                   <br/>
+                   <br/>
+      &nbsp;
+<table align="center" border="0" cellpadding="1" cellspacing="1" style="width:80%;">
+	<tbody>
+                                            
+                    <tr>
+                   <td>&nbsp;</td>
+			<td style="text-align: justify;"><span style="font-size:18px;"><span style="text-align: justify;"><span style="line-height: 1.5";></span></span></td>
+			<td><span style="font-size:18px;">&nbsp;&nbsp;</span></td>
+                   
+		</tr>
+                   <tr>
+			<td>&nbsp;&nbsp;</td>
+                   </tr>
+                  
+                    <tr>
+			<td>&nbsp;&nbsp;</td>
+			 <!--
+                            <td style="text-align: justify;"><span style="font-size:18px;"><span style="text-align: justify;"><span style="line-height: 1.5";><font color="red">New discriminant-function-based multidimensional discrimination of mid-ocean ridge and oceanic plateau. Verma S. P. and Diaz-Gonzalez L. (2019).</font></span></span></td>
+                         -->
+			<td><span style="font-size:18px;">&nbsp;&nbsp;</span></td>
+		</tr>
+                    <tr>
+			<td>&nbsp;&nbsp;</td>
+                   </tr>                        
+                                            <tr>
+			         <td>&nbsp;&nbsp;</td>
+			<td style="text-align: center;"><span style="font-size:18px;"><span style="text-align: justify;"><span style="line-height: 1.5";><font color="green">
+
+TecMagDiSys (Tectono-Magmatic Discrimination System) <br>
+Lorena Díaz-González <br> 
+
+<br>
+Abstract <br>
+TecMagDiSys is a new online software for deciphering a total of 29 igneous rock tectonic settings through two new comprehensive multidimensional discrimination models: only major elements (M; SiO2 to P2O5), and major and trace elements (MT; SiO2 to P2O5, Cr, Nb, Ni, V, Y, and Zr). TecMagDiSys allows the application of 56 discriminant functions and estimates the probabilities for all classes. This program provides a “ready for publication” report for a sample set, including the adjusted data, log-transformed variables, discriminant function results, and probability values for individual samples. Therefore, this comprehensive discrimination scheme can be recommended by using the TecMagDiSys software in any future applications for probability-based inferences on tectonic settings for all kinds of igneous rocks. 
+<br>
+
+
+
+</font></span></span></td>
+			<td><span style="font-size:18px;">&nbsp;&nbsp;</span></td>
+                   </tr>
+		<tr>
+			<td>&nbsp;&nbsp;</td>
+ <!--			
+<td style="text-align: justify;"><span style="font-size:18px;"><span style="text-align: justify;"><span style="line-height: 1.5";> ++++completar</span></span></td>
+-->			
+		</tr>
+                                            
+                                             <tr>
+			<td>&nbsp;&nbsp;</td>
+                   </tr>
+                                            
+                                           
+                                            <tr>
+			<td>&nbsp;</td>
+			<td style="text-align: justify;"><span style="font-size:18px;"><span style="text-align: justify;"><span style="line-height: 1.5";>
+
+
+You must paste your data in the appropriate template to process them in TecMagDiSys. Templates are available in the menu on the right.
+<br><br>
+This program was developed by Díaz-GOnzález (2021) from comprehensive tectono-magmatic discrimination scheme was proposed by Verma (2020).
+<br>
+We would request you to kindly cite this program as follows:
+<br>*Díaz-González, L. (2021). TecMagDiSys: A new computer program for multidimensional tectonomagmatic discrimination. Submitted to Geoscience Frontiers.
+<br>
+*Verma, S.P. (2020). Comprehensive multidimensional tectonomagmatic discrimination from log-ratio transformed major and trace elements. Lithos, 362, 105476.
+<br>
+
+If you have any questions, please let us know.  <br><br>
+ldg@uaem.mx
+
+</span></span></td>
+			
+    <td><span style="font-size:18px;">&nbsp;&nbsp;</span></td>
+		</tr>
+	</tbody>
+</table>
+
+<p>&nbsp;</p>
+
+    ]]></html>
+                                    </vbox>
+                                    
+                                    
+                                    
+                                    <window visible="@load(vm.fileopen)" mode="embedded" title="File Open" width="100%" height="100%" minimizable="false">
+	     
+                                        <grid  model="@bind(vm.tabla)" autopaging="true" mold="paging" vflex="1" sizedByContent="true" width="100%"  height="90%">
+           
+
+
+                                            <auxhead>
+                                                <auxheader label="GENERAL DATA" colspan="5"  align="center"  />
+                                                <auxheader label="ELEMENTS" colspan="17"  align="center"/>
+                
+                                                <auxheader label="ADJUSTED_M" colspan="10"  align="center"/>
+                                                <auxheader label="TRANSFORM ILR_Major" colspan="9"  align="center"/>
+                            
+                                                <auxheader label="ADJUSTED_MT" colspan="16"  align="center"/>
+                                                <auxheader label="TRANSFORM ILR_MT" colspan="15"  align="center"/>
+                      
+                 
+
+                
+                                            </auxhead>
+    
+    
+                                            <auxhead>
+                                                <auxheader label="" colspan="5"/>
+                                                <auxheader label="" colspan="17"/>
+               
+                                                <auxheader label="" colspan="10"/>
+                                                <auxheader label="" colspan="9"/>
+                            
+                                                <auxheader label="" colspan="16"/>
+                                                <auxheader label="" colspan="15"/>
+               
+                                            </auxhead>
+                                            <columns  >
+                                                <column label="CONST" width="100px"/>
+                                                <column label="LOCALITY"  width="100px"/>
+                                                <column label="SAMPID" width="100px"/>
+                                                                
+                                                <column label="SIO2" width="100px"/>
+                                                <column label="TIO2" width="100px"/>
+                                                <column label="AL2O3" width="100px"/>
+                                                <column label="FE2O3" width="100px"/>                                                
+                                                <column label="MNO" width="100px"/>
+                                                <column label="MGO" width="100px"/>
+                                                <column label="CAO" width="100px"/>
+                                                <column label="NA2O" width="100px"/>
+                                                <column label="K2O" width="100px"/>
+                                                <column label="P2O5" width="100px"/>
+                                                <column label="Cr" width="100px"/>
+                                                <column label="Nb" width="100px"/>
+                                                <column label="Ni" width="100px"/>
+                                                <column label="V"  width="100px"/>
+                                                <column label="Y" width="100px"/>
+                                                <column label="Zr" width="100px" />
+                
+                                                
+                                                <column label="SIO2adj1" width="100px"/>
+                                                <column label="TIO2adj1" width="100px" />
+                                                <column label="AL2O3adj1" width="100px" />
+                                                <column label="FE2O3Tadj1" width="100px" />
+                                                <column label="MNOadj1" width="100px" />
+                                                <column label="MGOadj1" width="100px" />
+                                                <column label="CAOadj1" width="100px"/>
+                                                <column label="NA2Oadj1" width="100px" />
+                                                <column label="K2Oadj1" width="100px"/>
+                                                <column label="P2O5adj1" width="100px" />
+                
+                                                <column label="IlrTIO2m" width="100px" />
+                                                <column label="IlrAL2O3m" width="100px" />
+                                                <column label="IlrFE2O3Tm" width="100px" />
+                                                <column label="IlrMNOm" width="100px" />
+                                                <column label="IlrMGOm" width="100px" />
+                                                <column label="IlrCAOm" width="100px"/>
+                                                <column label="IlrNA2Om" width="100px" />
+                                                <column label="IlrK2Om" width="100px"/>
+                                                <column label="IlrP2O5m" width="100px" />
+                            
+                                                <column label="SIO2adjmt" width="100px"/>
+                                                <column label="TIO2adjmt" width="100px" />
+                                                <column label="AL2O3adjmt" width="100px" />
+                                                <column label="FE2O3Tadjmt" width="100px" />
+                                                <column label="MNOadjmt" width="100px" />
+                                                <column label="MGOadjmt" width="100px" />
+                                                <column label="CAOadjmt" width="100px"/>
+                                                <column label="NA2Oadjmt" width="100px" />
+                                                <column label="K2Oadjmt" width="100px"/>
+                                                <column label="P2O5adjmt" width="100px" />
+                                                <column label="Cradjmt" width="100px" />
+                                                <column label="Nbadjmt" width="100px" />
+                                                <column label="NiOadjmt" width="100px"/>
+                                                <column label="V2adjmt" width="100px" />
+                                                <column label="Yadjmt" width="100px"/>
+                                                <column label="Zradjmt" width="100px" />
+                
+                                                <column label="IlrTIO2mt" width="100px" />
+                                                <column label="IlrAL2O3mt" width="100px" />
+                                                <column label="IlrFE2O3Tmt" width="100px" />
+                                                <column label="IlrMNOmt" width="100px" />
+                                                <column label="IlrMGOmt" width="100px" />
+                                                <column label="IlrCAOmt" width="100px"/>
+                                                <column label="IlrNA2Omt" width="100px" />
+                                                <column label="IlrK2Omt" width="100px"/>
+                                                <column label="IlrP2O5mt" width="100px" />
+                                                <column label="IlrCrmt" width="100px" />
+                                                <column label="IlrNbmt" width="100px" />
+                                                <column label="IlrNimt" width="100px"/>
+                                                <column label="IlrVmt" width="100px" />
+                                                <column label="IlrYmt" width="100px"/>
+                                                <column label="IlrZrmt" width="100px" />
+                
+                                                <column label="DF1_SG1-2-3_M" width="100px" />
+                                                <column label="DF2_SG1-2-3_M" width="100px" />
+                                                <column label="P1_SG1_M" width="100px" />
+                                                <column label="P2_SG2_M" width="100px" />
+                                                <column label="P3_SG3_M" width="100px" />
+                                                <column label="Decision_SG1-2-3_M" width="100px" />
+                                                <column label="DF1_MG11-12-13_M" width="100px" />
+                                                <column label="DF2_MG11-12-13_M" width="100px" />
+                                                <column label="P1_MG11_M" width="100px" />
+                                                <column label="P2_MG12_M" width="100px" />
+                                                <column label="P3_MG13_M" width="100px" />
+                                                <column label="Decision_MG11-12-13_M" width="100px" />
+                                                <column label="DF1_Gr111-112-113_M" width="100px" />
+                                                <column label="DF2_Gr111-112-113_M" width="100px" />
+                                                <column label="P1_Gr111_M" width="100px" />
+                                                <column label="P2_Gr112_M" width="100px" />
+                                                <column label="P3_Gr113_M" width="100px" />
+                                                <column label="Decision_Gr111-112-113_M" width="100px" />
+                                                <column label="DF1_sGr1111-1112-1113_M" width="100px" />
+                                                <column label="DF2_sGr1111-1112-1113_M" width="100px" />
+                                                <column label="P1_sGr1111_M" width="100px" />
+                                                <column label="P2_sGr1112_M" width="100px" />
+                                                <column label="P3_sGr1113_M" width="100px" />
+                                                <column label="Decision_sGr1111-1112-1113_M" width="100px" />
+                                                <column label="DF0_sGr1121-1122_M" width="100px" />
+                                                <column label="P1_1121_M" width="100px" />
+                                                <column label="P2_1122_M" width="100px" />
+                                                <column label="Decision_sGr1121-1122_M" width="100px" />
+                                                <column label="DF0_Gr121-122_M" width="100px" />
+                                                <column label="P1_Gr121_M" width="100px" />
+                                                <column label="P2_Gr122_M" width="100px" />
+                                                <column label="Decision_Gr121-122_M" width="100px" />
+                                                <column label="DF0_sGr1211-1212_M" width="100px" />
+                                                <column label="P1_sGr1211_M" width="100px" />
+                                                <column label="P2_sGr1212_M" width="100px" />
+                                                <column label="Decision_sGr1211-1212_M" width="100px" />
+                                                <column label="DF0_sGr1221-1222_M" width="100px" />
+                                                <column label="P1_sGr1221_M" width="100px" />
+                                                <column label="P2_sGr1222_M" width="100px" />
+                                                <column label="Decision_sGr1221-1222_M" width="100px" />
+                                                <column label="DF1_MG21-22-23_M" width="100px" />
+                                                <column label="DF2_MG21-22-23_M" width="100px" />
+                                                <column label="P1_MG21_M" width="100px" />
+                                                <column label="P2_MG22_M" width="100px" />
+                                                <column label="P3_MG23_M" width="100px" />
+                                                <column label="Decision_MG21-22-23_M" width="100px" />
+                                                <column label="DF1_Gr211-212-213_M" width="100px" />
+                                                <column label="DF2_Gr211-212-213_M" width="100px" />
+                                                <column label="P1_Gr211_M" width="100px" />
+                                                <column label="P2_Gr212_M" width="100px" />
+                                                <column label="P3_Gr213_M" width="100px" />
+                                                <column label="Decision_Gr211-212-213_M" width="100px" />
+                                                <column label="DF1_Gr221-222-223_M" width="100px" />
+                                                <column label="DF2_Gr221-222-223_M" width="100px" />
+                                                <column label="P1_Gr221_M" width="100px" />
+                                                <column label="P2_Gr222_M" width="100px" />
+                                                <column label="P3_Gr223_M" width="100px" />
+                                                <column label="Decision_Gr221-222-223_M" width="100px" />
+                                                <column label="DF1_Gr231-232-233_M" width="100px" />
+                                                <column label="DF2_Gr231-232-233_M" width="100px" />
+                                                <column label="P1_Gr231_M" width="100px" />
+                                                <column label="P2_Gr232_M" width="100px" />
+                                                <column label="P3_Gr233_M" width="100px" />
+                                                <column label="Decision_Gr231-232-233_M" width="100px" />
+                                                <column label="DF0_sGr2311-2312_M" width="100px" />
+                                                <column label="P1_sGr2311_M" width="100px" />
+                                                <column label="P2_sGr2312_M" width="100px" />
+                                                <column label="Decision_sGr2311-2312_M" width="100px" />
+                                                <column label="DF0_sGr23111-23112_M" width="100px" />
+                                                <column label="P1_sGr23111_M" width="100px" />
+                                                <column label="P2_sGr23112_M" width="100px" />
+                                                <column label="Decision_sGr23111-23112_M" width="100px" />
+                                                <column label="DF0_sGr23121-23122_M" width="100px" />
+                                                <column label="P1_sGr23121_M" width="100px" />
+                                                <column label="P2_sGr23122_M" width="100px" />
+                                                <column label="Decision_sGr23121-23122_M" width="100px" />
+                                                <column label="DF0_sGr2321-2322_M" width="100px" />
+                                                <column label="P1_sGr2321_M" width="100px" />
+                                                <column label="P2_sGr2322_M" width="100px" />
+                                                <column label="Decision_sGr2321-2322_M" width="100px" />
+                                                <column label="DF1_MG31-32-33_M" width="100px" />
+                                                <column label="DF2_MG31-32-33_M" width="100px" />
+                                                <column label="P1_MG31_M" width="100px" />
+                                                <column label="P2_MG32_M" width="100px" />
+                                                <column label="P3_MG33_M" width="100px" />
+                                                <column label="Decision_MG31-32-33_M" width="100px" />
+                                                <column label="DF1_Gr311-312-313_M" width="100px" />
+                                                <column label="DF2_Gr311-312-313_M" width="100px" />
+                                                <column label="P1_Gr311_M" width="100px" />
+                                                <column label="P2_Gr312_M" width="100px" />
+                                                <column label="P3_Gr313_M" width="100px" />
+                                                <column label="Decision_Gr311-312-313_M" width="100px" />
+
+                                                <column label="RESULT_M" width="150px"/>
+                                               
+                                                <column label="DF1_SG1-2-3_MT" width="100px" />
+                                                <column label="DF2_SG1-2-3_MT" width="100px" />
+                                                <column label="P1_SG1_MT" width="100px" />
+                                                <column label="P2_SG2_MT" width="100px" />
+                                                <column label="P3_SG3_MT" width="100px" />
+                                                <column label="Decision_SG1-2-3_MT" width="100px" />
+                                                <column label="DF1_MG11-12-13_MT" width="100px" />
+                                                <column label="DF2_MG11-12-13_MT" width="100px" />
+                                                <column label="P1_MG11_MT" width="100px" />
+                                                <column label="P2_MG12_MT" width="100px" />
+                                                <column label="P3_MG13_MT" width="100px" />
+                                                <column label="Decision_MG11-12-13_MT" width="100px" />
+                                                <column label="DF1_Gr111-112-113_MT" width="100px" />
+                                                <column label="DF2_Gr111-112-113_MT" width="100px" />
+                                                <column label="P1_Gr111_MT" width="100px" />
+                                                <column label="P2_Gr112_MT" width="100px" />
+                                                <column label="P3_Gr113_MT" width="100px" />
+                                                <column label="Decision_Gr111-112-113_MT" width="100px" />
+                                                <column label="DF1_sGr1111-1112-1113_MT" width="100px" />
+                                                <column label="DF2_sGr1111-1112-1113_MT" width="100px" />
+                                                <column label="P1_sGr1111_MT" width="100px" />
+                                                <column label="P2_sGr1112_MT" width="100px" />
+                                                <column label="P3_sGr1113_MT" width="100px" />
+                                                <column label="Decision_sGr1111-1112-1113_MT" width="100px" />
+                                                <column label="DF0_sGr1121-1122_MT" width="100px" />
+                                                <column label="P1_1121_MT" width="100px" />
+                                                <column label="P2_1122_MT" width="100px" />
+                                                <column label="Decision_sGr1121-1122_MT" width="100px" />
+                                                <column label="DF0_Gr121-122_MT" width="100px" />
+                                                <column label="P1_Gr121_MT" width="100px" />
+                                                <column label="P2_Gr122_MT" width="100px" />
+                                                <column label="Decision_Gr121-122_MT" width="100px" />
+                                                <column label="DF0_sGr1211-1212_MT" width="100px" />
+                                                <column label="P1_sGr1211_MT" width="100px" />
+                                                <column label="P2_sGr1212_MT" width="100px" />
+                                                <column label="Decision_sGr1211-1212_MT" width="100px" />
+                                                <column label="DF0_sGr1221-1222_MT" width="100px" />
+                                                <column label="P1_sGr1221_MT" width="100px" />
+                                                <column label="P2_sGr1222_MT" width="100px" />
+                                                <column label="Decision_sGr1221-1222_MT" width="100px" />
+                                                <column label="DF1_MG21-22-23_MT" width="100px" />
+                                                <column label="DF2_MG21-22-23_MT" width="100px" />
+                                                <column label="P1_MG21_MT" width="100px" />
+                                                <column label="P2_MG22_MT" width="100px" />
+                                                <column label="P3_MG23_MT" width="100px" />
+                                                <column label="Decision_MG21-22-23_MT" width="100px" />
+                                                <column label="DF1_Gr211-212-213_MT" width="100px" />
+                                                <column label="DF2_Gr211-212-213_MT" width="100px" />
+                                                <column label="P1_Gr211_MT" width="100px" />
+                                                <column label="P2_Gr212_MT" width="100px" />
+                                                <column label="P3_Gr213_MT" width="100px" />
+                                                <column label="Decision_Gr211-212-213_MT" width="100px" />
+                                                <column label="DF1_Gr221-222-223_MT" width="100px" />
+                                                <column label="DF2_Gr221-222-223_MT" width="100px" />
+                                                <column label="P1_Gr221_MT" width="100px" />
+                                                <column label="P2_Gr222_MT" width="100px" />
+                                                <column label="P3_Gr223_MT" width="100px" />
+                                                <column label="Decision_Gr221-222-223_MT" width="100px" />
+                                                <column label="DF1_Gr231-232-233_MT" width="100px" />
+                                                <column label="DF2_Gr231-232-233_MT" width="100px" />
+                                                <column label="P1_Gr231_MT" width="100px" />
+                                                <column label="P2_Gr232_MT" width="100px" />
+                                                <column label="P3_Gr233_MT" width="100px" />
+                                                <column label="Decision_Gr231-232-233_MT" width="100px" />
+                                                <column label="DF0_sGr2311-2312_MT" width="100px" />
+                                                <column label="P1_sGr2311_MT" width="100px" />
+                                                <column label="P2_sGr2312_MT" width="100px" />
+                                                <column label="Decision_sGr2311-2312_MT" width="100px" />
+                                                <column label="DF0_sGr23111-23112_MT" width="100px" />
+                                                <column label="P1_sGr23111_MT" width="100px" />
+                                                <column label="P2_sGr23112_MT" width="100px" />
+                                                <column label="Decision_sGr23111-23112_MT" width="100px" />
+                                                <column label="DF0_sGr23121-23122_MT" width="100px" />
+                                                <column label="P1_sGr23121_MT" width="100px" />
+                                                <column label="P2_sGr23122_MT" width="100px" />
+                                                <column label="Decision_sGr23121-23122_MT" width="100px" />
+                                                <column label="DF0_sGr2321-2322_MT" width="100px" />
+                                                <column label="P1_sGr2321_MT" width="100px" />
+                                                <column label="P2_sGr2322_MT" width="100px" />
+                                                <column label="Decision_sGr2321-2322_MT" width="100px" />
+                                                <column label="DF1_MG31-32-33_MT" width="100px" />
+                                                <column label="DF2_MG31-32-33_MT" width="100px" />
+                                                <column label="P1_MG31_MT" width="100px" />
+                                                <column label="P2_MG32_MT" width="100px" />
+                                                <column label="P3_MG33_MT" width="100px" />
+                                                <column label="Decision_MG31-32-33_MT" width="100px" />
+                                                <column label="DF1_Gr311-312-313_MT" width="100px" />
+                                                <column label="DF2_Gr311-312-313_MT" width="100px" />
+                                                <column label="P1_Gr311_MT" width="100px" />
+                                                <column label="P2_Gr312_MT" width="100px" />
+                                                <column label="P3_Gr313_MT" width="100px" />
+                                                <column label="Decision_Gr311-312-313_MT" width="100px" />
+
+                                                <column label="RESULT_MT" width="100px"/>
+           
+                                            </columns>
+           
+                                            <template name="model">
+                                                <row>
+                                                    <label value="@bind(each.consecut)"/>
+                                                    <label value="@bind(each.locality)"/>
+                                                    <label value="@bind(each.sampID)"/>
+                     
+                                                    <label value="@bind(each.sio2)"/>
+                                                    <label value="@bind(each.tio2)"/>
+                                                    <label value="@bind(each.al2o3)"/>
+                                                    <label value="@bind(each.fe2o3)"/>                                                    
+                                                    <label value="@bind(each.mno)"/>
+                                                    <label value="@bind(each.mgo)"/>
+                                                    <label value="@bind(each.cao)"/>
+                                                    <label value="@bind(each.na2o)"/>
+                                                    <label value="@bind(each.k2o)"/>
+                                                    <label value="@bind(each.p2o5)"/>
+                                                    
+                                                    <label value="@bind(each.cr)"/>
+                                                    <label value="@bind(each.nb)"/>
+                                                    <label value="@bind(each.ni)"/>
+                                                    <label value="@bind(each.v)"/>
+                                                    <label value="@bind(each.y)"/>
+                                                    <label value="@bind(each.zr)"/>
+                    
+
+                                                    <textbox value="@bind(each.sio2A)" inplace="true"/>
+                                                    <textbox value="@bind(each.tio2A)" inplace="true"/>
+                                                    <textbox value="@bind(each.al2o3A)" inplace="true"/>
+                                                    <textbox value="@bind(each.fe2o3tA)" inplace="true"/>
+                                                    <textbox value="@bind(each.mnoA)" inplace="true"/>
+                                                    <textbox value="@bind(each.mgoA)" inplace="true"/>
+                                                    <textbox value="@bind(each.caoA)" inplace="true"/>
+                                                    <textbox value="@bind(each.na2oA)" inplace="true"/>
+                                                    <textbox value="@bind(each.k2oA)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2o5A)" inplace="true"/>
+                    
+                                                    <textbox value="@bind(each.ilrTiM)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrAlM)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrFeTM)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrMnM)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrMgM)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrCaM)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrNaM)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrKM)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrPM)" inplace="true"/>
+                                                                        
+                                                    <textbox value="@bind(each.sio2mtA)" inplace="true"/>
+                                                    <textbox value="@bind(each.tio2mtA)" inplace="true"/>
+                                                    <textbox value="@bind(each.al2o3mtA)" inplace="true"/>
+                                                    <textbox value="@bind(each.fe2o3tmtA)" inplace="true"/>
+                                                    <textbox value="@bind(each.mnomtA)" inplace="true"/>
+                                                    <textbox value="@bind(each.mgomtA)" inplace="true"/>
+                                                    <textbox value="@bind(each.caomtA)" inplace="true"/>
+                                                    <textbox value="@bind(each.na2omtA)" inplace="true"/>
+                                                    <textbox value="@bind(each.k2omtA)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2o5mtA)" inplace="true"/>
+                                
+                                                    <textbox value="@bind(each.crmtA)" inplace="true"/>
+                                                    <textbox value="@bind(each.nbmtA)" inplace="true"/>
+                                                    <textbox value="@bind(each.nimtA)" inplace="true"/>
+                                                    <textbox value="@bind(each.vmtA)" inplace="true"/>
+                                                    <textbox value="@bind(each.ymtA)" inplace="true"/>
+                                                    <textbox value="@bind(each.zrmtA)" inplace="true"/>
+                    
+                                                    <textbox value="@bind(each.ilrTiMT)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrAlMT)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrFeTMT)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrMnMT)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrMgMT)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrCaMT)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrNaMT)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrKMT)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrPMT)" inplace="true"/>
+                                
+                                                    <textbox value="@bind(each.ilrCrMT)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrNbMT)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrNiMT)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrVMT)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrYMT)" inplace="true"/>
+                                                    <textbox value="@bind(each.ilrZrMT)" inplace="true"/>
+                                                    
+                                                    <textbox value="@bind(each.df1_SG1_2_3Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_SG1_2_3Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_SG1M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_SG2M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_SG3M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_SG1_2_3M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_MG11_12_13Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_MG11_12_13Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_MG11M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_MG12M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_MG13M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_MG11_12_13M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_Gr111_112_113Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_Gr111_112_113Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_Gr111M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_Gr112M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_Gr113M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_Gr111_112_113M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_sGr1111_1112_1113Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_sGr1111_1112_1113Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_sGr1111M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_sGr1112M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_sGr1113M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr1111_1112_1113M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_sGr1121_1122Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_1121M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_1122M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr1121_1122M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_Gr121_122Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_Gr121M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_Gr122M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_Gr121_122M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_sGr1211_1212Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_sGr1211M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_sGr1212M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr1211_1212M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_sGr1221_1222Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_sGr1221M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_sGr1222M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr1221_1222M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_MG21_22_23Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_MG21_22_23Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_MG21M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_MG22M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_MG23M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_MG21_22_23M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_Gr211_212_213Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_Gr211_212_213Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_Gr211M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_Gr212M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_Gr213M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_Gr211_212_213M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_Gr221_222_223Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_Gr221_222_223Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_Gr221M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_Gr222M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_Gr223M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_Gr221_222_223M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_Gr231_232_233Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_Gr231_232_233Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_Gr231M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_Gr232M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_Gr233M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_Gr231_232_233M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_sGr2311_2312Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_sGr2311M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_sGr2312M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr2311_2312M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_sGr23111_23112Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_sGr23111M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_sGr23112M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr23111_23112M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_sGr23121_23122Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_sGr23121M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_sGr23122M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr23121_23122M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_sGr2321_2322Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_sGr2321M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_sGr2322M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr2321_2322M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_MG31_32_33Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_MG31_32_33Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_MG31M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_MG32M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_MG33M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_MG31_32_33M)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_Gr311_312_313Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_Gr311_312_313Md)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_Gr311M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_Gr312M)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_Gr313M)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_Gr311_312_313M)" inplace="true"/>
+
+                                                    <textbox value="@bind(each.resultM)" inplace="true"/>                                                    
+                                                    
+                                                    <textbox value="@bind(each.df1_SG1_2_3MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_SG1_2_3MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_SG1MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_SG2MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_SG3MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_SG1_2_3MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_MG11_12_13MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_MG11_12_13MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_MG11MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_MG12MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_MG13MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_MG11_12_13MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_Gr111_112_113MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_Gr111_112_113MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_Gr111MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_Gr112MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_Gr113MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_Gr111_112_113MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_sGr1111_1112_1113MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_sGr1111_1112_1113MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_sGr1111MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_sGr1112MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_sGr1113MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr1111_1112_1113MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_sGr1121_1122MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_1121MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_1122MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr1121_1122MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_Gr121_122MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_Gr121MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_Gr122MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_Gr121_122MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_sGr1211_1212MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_sGr1211MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_sGr1212MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr1211_1212MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_sGr1221_1222MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_sGr1221MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_sGr1222MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr1221_1222MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_MG21_22_23MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_MG21_22_23MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_MG21MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_MG22MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_MG23MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_MG21_22_23MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_Gr211_212_213MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_Gr211_212_213MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_Gr211MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_Gr212MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_Gr213MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_Gr211_212_213MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_Gr221_222_223MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_Gr221_222_223MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_Gr221MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_Gr222MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_Gr223MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_Gr221_222_223MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_Gr231_232_233MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_Gr231_232_233MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_Gr231MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_Gr232MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_Gr233MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_Gr231_232_233MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_sGr2311_2312MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_sGr2311MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_sGr2312MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr2311_2312MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_sGr23111_23112MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_sGr23111MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_sGr23112MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr23111_23112MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_sGr23121_23122MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_sGr23121MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_sGr23122MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr23121_23122MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df0_sGr2321_2322MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_sGr2321MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_sGr2322MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_sGr2321_2322MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_MG31_32_33MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_MG31_32_33MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_MG31MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_MG32MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_MG33MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_MG31_32_33MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.df1_Gr311_312_313MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.df2_Gr311_312_313MTd)" inplace="true"/>
+                                                    <textbox value="@bind(each.p1_Gr311MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p2_Gr312MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.p3_Gr313MT)" inplace="true"/>
+                                                    <textbox value="@bind(each.decision_Gr311_312_313MT)" inplace="true"/>
+
+                                                    <textbox value="@bind(each.resultMT)" inplace="true"/>                     
+                                                </row>
+                                            </template>
+           
+                                        </grid>
+                                   
+
+         
+                                    </window>
+            
+                                    <separator></separator>
+   
+    
+                                    <progressmeter id="" value="@bind(vm.progreso)" width="100%"  visible="@load(vm.fileprocess)"/>
+            
+                                </tabpanel>
+                                <tabpanel style="color:#333399;">
+                                    <window id="imag" title="SETTING MAJOR"  sclass="warning" visible="@load(vm.graficas)" width="100%"  height="100%" border="normal"  >
+          
+                                        <hbox>
+       
+                                            <image id="myImage" content="@load(vm.imagen)" visible="@load(not empty vm.imagen)" />
+            
+                                        </hbox>
+    
+       
+                                    </window>
+            
+            
+                                </tabpanel>
+                                <tabpanel style="color:#663366;" hflex="1" vflex="1">
+                                    <window id="imag2" title="SETTING MAJOR AND TRACE"  sclass="warning" visible="@load(vm.graficas)" hflex="1" vflex="1" border="normal" sizable="true">
+                                        <hbox>
+                                            <image id="myImage2" content="@load(vm.imagen2)" visible="@load(not empty vm.imagen2)"/>
+                                        </hbox>
+                                    </window>
+            
+                                </tabpanel>
+                                
+                           
+                            </tabpanels>
+                        </tabbox>
+                      
+   
+                    </center>
+   
+                    <east size="1%" border="none" >
+			
+                    </east>
+                    
+                </borderlayout>
+                
+                
+            </south>      		  
+        </borderlayout>
+        <vbox>
+            
+            <iframe height="10%" width="10%" id="reportframe" content="@bind(vm.fileContent)"/>
+            <iframe height="10%" width="10%" id="reportframe2" content="@bind(vm.fileContent2)"/>
+            <iframe height="10%" width="10%" id="reportframe3" content="@bind(vm.fileContent3)"/>
+            <iframe height="10%" width="10%" id="reportframe4" content="@bind(vm.fileContentReportMT)"/>
+            
+            <iframe height="10%" width="10%" id="reportframe6" content="@bind(vm.fileContentimg1)"/>   
+            <iframe height="10%" width="10%" id="reportframe7" content="@bind(vm.fileContentimg2)"/> 
+            
+           
+             
+        </vbox>
+            
+    </window>
+</zk>
+

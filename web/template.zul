@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native">
+   <window id="test" title= "Welcome to APMDisc" border="none" position="parent" mode="embedded" width="100%" contentStyle="background:#eff7fc" height="100%"  apply="org.zkoss.bind.BindComposer"
+            viewModel="@id('vm') @init('M_T.ClassMain')">
+       
+       <borderlayout>
+			<west title="Menu Options" size="20%" flex="true" maxsize="250" splittable="true" collapsible="true">
+				 <menubar id="menubar" orient="vertical" autodrop="true" width="100%">
+             
+                                     
+                                    
+                                        
+	    		<menu label="File" width="100%" src="">
+                            		<menupopup>
+                                         
+                                         <menuitem label="Open file" width="100%"  upload="true" onUpload="@command('open',upEvent=event)"/>
+                                        
+	    				<menuseparator/>
+	    				<menuitem label="Close"  width="100%" onClick="alert(self.label)"/>
+	    			</menupopup>
+	    		</menu>
+
+                                                                                                                                                                                                                                                                                                                                                                                              
+                                                                                                                                                
+                        <menu label="Pocess File"  visible="@load(vm.fileuploaded)">
+	    			<menupopup>
+                                    <menu label="process">
+                                        <menupopup>
+                                            <menuitem label="Only (Major)"  onClick="@command('procesa_Archivo_Major')"/>
+                                            <menuitem label="Only (Major and Trace)"  onClick="@command('procesa_Archivo_MT')"/>
+                                        </menupopup>
+                                        
+                                    </menu>		 				
+	    				<menuseparator/>
+                                        
+                                    
+	    				
+	    			</menupopup>
+	    		</menu>
+                        
+                         
+                        <menuitem label="Gaming" onClick="alert(self.label)" />
+        <menuitem label="TV &amp; Audio" onClick="alert(self.label)" />
+        <menuitem label="Photo &amp; Video" onClick="alert(self.label)" />
+        <menuitem label="Communication" onClick="alert(self.label)" />
+                        <menuitem label="Figures" visible="@load(vm.fileprocess)" onClick="@command('graficas_major')" />
+                         <menuitem label="Open file" src="" upload="true" onUpload="@command('open',upEvent=event)"/>
+                        
+	    			
+	    		
+              </menubar>
+			</west>
+			
+			<east size="80%" border="none" flex="true">
+				
+			</east>
+		</borderlayout>
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       <hbox >
+        
+           
+            
+           
+                        
+                          
+        <window visible="@load(vm.fileuploaded)" title="file open" border="normal"  sizable="true"  onClose="" closable="true"  maximizable="true" width="90%"  height="70%">
+	     
+            <grid  model="@bind(vm.tabla)"   autopaging="true" mold="paging" vflex="1" sizedByContent="true" width="100%"  height="50%">
+           
+
+                <auxhead>
+                <auxheader label="GENERAL DATA" colspan="3"  align="center"  />
+                <auxheader label="MAJOR ELEMENTS" colspan="10"  align="center"/>
+                
+                <auxheader label="ADJUSTED" colspan="10"  align="center"/>
+                <auxheader label="TRANSFORM ILR_Major" colspan="9"  align="center"/>
+                  
+                 
+
+                
+            </auxhead>
+    
+            <auxhead>
+                <auxheader label="" colspan="3"/>
+                <auxheader label="" colspan="10"/>
+               
+                <auxheader label="" colspan="10"/>
+                <auxheader label="" colspan="9"/>
+               
+            </auxhead>
+            <columns  >
+                <column label="CONST" width="100px"/>
+                <column label="LOCALITY"  width="100px"/>
+                <column label="SAMPID" width="100px"/>
+               
+                 
+                <column label="SIO2"/>
+                <column label="TIO2"/>
+                <column label="AL2O3"/>
+                <column label="FE2O3T"/>
+                <column label="MNO"/>
+                <column label="MGO"/>
+                <column label="CAO"/>
+                <column label="NA2O"/>
+                <column label="K2O"/>
+                <column label="P2O5"/>
+                
+                
+
+                <column label="SIO2adj1" width="100px"/>
+                <column label="TIO2adj1" width="100px" />
+                <column label="AL2O3adj1" width="100px" />
+                <column label="FE2O3Tadj1" width="100px" />
+                <column label="MNOadj1" width="100px" />
+                <column label="MGOadj1" width="100px" />
+                <column label="CAOadj1" width="100px"/>
+                <column label="NA2Oadj1" width="100px" />
+                <column label="K2Oadj1" width="100px"/>
+                <column label="P2O5adj1" width="100px" />
+                
+                <column label="IlrTIO2m" width="100px" />
+                <column label="IlrAL2O3m" width="100px" />
+                <column label="IlrFE2O3Tm" width="100px" />
+                <column label="IlrMNOm" width="100px" />
+                <column label="IlrMGOm" width="100px" />
+                <column label="IlrCAOm" width="100px"/>
+                <column label="IlrNA2Om" width="100px" />
+                <column label="IlrK2Om" width="100px"/>
+                <column label="IlrP2O5m" width="100px" />
+                
+               
+           
+            </columns>
+           
+            <template name="model">
+                <row>
+                   <label value="@bind(each.consecut)"/>
+                     <label value="@bind(each.locality)"/>
+                     <label value="@bind(each.sampID)"/>
+                     
+                     <label value="@bind(each.sio2)"/>
+                    <label value="@bind(each.tio2)"/>
+                    <label value="@bind(each.al2o3)"/>
+                    <label value="@bind(each.fe2o3t)"/>
+                    <label value="@bind(each.mno)"/>
+                    <label value="@bind(each.mgo)"/>
+                    <label value="@bind(each.cao)"/>
+                    <label value="@bind(each.na2o)"/>
+                    <label value="@bind(each.kk2o)"/>
+                    <label value="@bind(each.pp2o5)"/>
+                    
+                     
+                     
+                    <textbox value="@bind(each.sio2A)" inplace="true"/>
+                    <textbox value="@bind(each.tio2A)" inplace="true"/>
+                    <textbox value="@bind(each.al2o3A)" inplace="true"/>
+                    <textbox value="@bind(each.fe2o3tA)" inplace="true"/>
+                    <textbox value="@bind(each.mnoA)" inplace="true"/>
+                    <textbox value="@bind(each.mgoA)" inplace="true"/>
+                    <textbox value="@bind(each.caoA)" inplace="true"/>
+                    <textbox value="@bind(each.na2oA)" inplace="true"/>
+                    <textbox value="@bind(each.kk2oA)" inplace="true"/>
+                    <textbox value="@bind(each.pp2o5A)" inplace="true"/>
+                    
+                                    
+                    
+                    
+                    <textbox value="@bind(each.ilrTiM)" inplace="true"/>
+                    <textbox value="@bind(each.ilrAlM)" inplace="true"/>
+                    <textbox value="@bind(each.ilrFeTM)" inplace="true"/>
+                    <textbox value="@bind(each.ilrMnM)" inplace="true"/>
+                    <textbox value="@bind(each.ilrMgM)" inplace="true"/>
+                    <textbox value="@bind(each.ilrCaM)" inplace="true"/>
+                    <textbox value="@bind(each.ilrNaM)" inplace="true"/>
+                    <textbox value="@bind(each.ilrKM)" inplace="true"/>
+                    <textbox value="@bind(each.ilrPM)" inplace="true"/>
+                   
+                     
+                     
+                     
+                     
+                </row>
+            </template>
+           
+        </grid>
+       <separator></separator>
+   
+    
+	    	<progressmeter id="" value="@bind(vm.progreso)" width="100%"  visible="@load(vm.fileprocess)"/>
+
+         
+       </window>
+               
+        </hbox>
+        
+         
+          
+        
+        <vbox>
+            
+            
+            <iframe height="10%" width="10%" id="reportframe2" content="@bind(vm.fileContent2)"/> 
+            <iframe height="10%" width="10%" id="reportframe3" content="@bind(vm.fileContent3)"/>        
+            
+        </vbox> 
+       
+ 
+            
+    </window>
+
+   
+</zk>
+
+
